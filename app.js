@@ -11,6 +11,8 @@ const app = express();
 
 const connectDB = require("./db/connect");
 
+const productsRouter = require("./routes/products");
+
 //handling errors and not found
 
 const notFoundMiddleware = require("./middleware/not-found");
@@ -26,6 +28,7 @@ app.get("/", (req, res) => {
     res.send('<h1> Store Api</h1> <a href="api/vi//products">products </a>');
 });
 
+app.use("/api/v1/products", productsRouter);
 //products route
 
 app.use(notFoundMiddleware);
