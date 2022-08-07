@@ -3,6 +3,7 @@ console.log("pokrenuto");
 ///pokretanje funkcije za koriscenje env fajla
 require("dotenv").config();
 //async errors
+require("express-async-errors");
 
 /// express
 const express = require("express");
