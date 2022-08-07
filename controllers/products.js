@@ -7,7 +7,7 @@ const getAllProductsStatic = async(req, res) => {
 };
 
 const getAllProducts = async(req, res) => {
-    const { featured, company, name, sort, select } = req.query;
+    const { featured, company, name, sort, select, numericFilters } = req.query;
     const queryObject = {};
 
     if (featured) {
@@ -22,7 +22,7 @@ const getAllProducts = async(req, res) => {
         queryObject.name = { $regex: name, $options: "i" };
     }
 
-    //console.log(queryObject);
+    console.log(queryObject);
 
     // sort
 
@@ -47,9 +47,25 @@ const getAllProducts = async(req, res) => {
 
     const skip = (page - 1) * limit;
     result = result.skip(skip).limit(limit);
-    //23
     //
+    ///numeric filters
+    if (numericFilters) {
+        const operatorMap = {
+            ">": "$gt",
+            ">=": "$gte",
+            "=": "$eq",
+            "<": "$lt",
+            "<=": "$lte",
+        };
 
+        const regEx = /\b(<|>|>=|=|<|<=)\b/g;
+        let filters = numericFilters.replace(
+            regEx,
+            (match) => `-${operatorMap[match]}-`
+        );
+        console.log(filters);
+    }
+    //
     const products = await result;
     res.status(200).json({ products, nbHits: products.length });
 };
